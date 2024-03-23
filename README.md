@@ -59,8 +59,27 @@ vm2-u22-04 - http://158.160.154.87/
 
 ![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1-2-ansible.png)
 
+Создал Target Group, включил в неё две созданных ВМ.
 
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-2-1-target_group.png)
 
+Создал Backend Group, настроил backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-3-backend-group.png)
+
+Создал HTTP router. Путь указал — /, backend group — указал созданную ранее.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-4-http-router.png)
+
+Создал Application load balancer для распределения трафика на веб-сервера, созданные ранее. Указал HTTP router, созданный ранее, задал listener тип auto, порт 80. 
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-5-1-application-load-balancer.png)
+
+Результат теста сайта. Указал публичный IP балансера
+
+    curl -v 158.160.155.208:80
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-5-2-application-load-balancer.png)
 
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
