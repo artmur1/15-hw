@@ -45,6 +45,21 @@
 
 Создал vm1-u22-04 в зоне ru-central1-b и vm2-u22-04 в зоне ru-central1-d. Обе виртмашины работают на Ubuntu 22.04 LTS.
 
+Адреса вм:
+    
+    vm1-u22-04 - [84.201.141.114](http://84.201.141.114/)
+    
+    vm2-u22-04 - http://158.160.154.87/
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1.png)
+
+Создал manage-ubuntu22-04 для управления. Установил ansible. Написал плейбук для установки nginx на виртмашины.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1-3-ansible.png)
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1-2-ansible.png)
+
+
 
 
 ### Мониторинг
