@@ -88,12 +88,24 @@ vm2-u22-04 - http://158.160.154.87/
 
 ### Решение - Мониторинг
 
+Создал ВМ, развернул на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix.
+
+Zabbix сервер находится по адресу http://51.250.98.165/zabbix/index.php
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-2-1.png)
+
+Дешборды с отображением метрик.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-2-2.png)
+
 ### Логи
 Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
 
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
 
 ### Решение - Логи
+
+Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
 
 ### Сеть
 Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.
