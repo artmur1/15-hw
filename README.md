@@ -55,6 +55,8 @@ vm2-u22-04 - http://158.160.154.87/
 
 Создал manage-ubuntu22-04 для управления. Установил ansible. Написал плейбук для установки nginx на виртмашины.
 
+Плейбук для установки nginx на виртмашины - https://github.com/artmur1/15-hw/blob/main/15-1-1-4-playbook.txt
+
 ![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1-3-ansible.png)
 
 ![alt text](https://github.com/artmur1/15-hw/blob/main/15-1-1-2-ansible.png)
