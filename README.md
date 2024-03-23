@@ -109,7 +109,11 @@ Cоздал ВМ, развернул на ней Elasticsearch.
 
 Elasticsearch находится по адресу http://84.201.178.26:9200/
 
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-3-1.png)
+
 Установил Vector на обе ВМ: vm1-u22-04, vm2-u22-04.
+
+Конфиг Vector - https://github.com/artmur1/15-hw/blob/main/15-3-5-Vector.txt
 
 ![alt text](https://github.com/artmur1/15-hw/blob/main/15-3-1-2.png)
 
