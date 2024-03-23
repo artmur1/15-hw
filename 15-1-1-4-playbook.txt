@@ -1,0 +1,14 @@
+Плейбук для ansible:
+- name: "Install packages"
+  hosts: servers
+  become: yes
+  tags:
+  - init
+  tasks:
+
+  - name: "Ensure that required packages are installed"
+    apt:
+      name:
+        - nginx
+      state: present
+--------------------------

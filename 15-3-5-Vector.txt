@@ -1,0 +1,15 @@
+sources:
+  my_source_id:
+    type: file
+    include:
+      - /var/log/nginx/access.log
+      - /var/log/nginx/error.log
+sinks:
+  my_sink_id:
+    type: elasticsearch
+    inputs:
+      - my_source_id
+    endpoints:
+      - "http://84.201.178.26:9200/"
+    bulk:
+      index: "vector-%Y-%m-%d" # daily indices
