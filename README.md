@@ -138,10 +138,30 @@ Kibana находится по адресу http://62.84.123.190:5601/
 
 ### Решение - Сеть
 
+Развернул сеть VPC. Создал приватную и публичную подсети. Прописал порты.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-4-1.png)
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-4-2.png)
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-4-3.png)
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-4-4.png)
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-4-5.png)
+
 ### Резервное копирование
 Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
 
 ### Решение - Резервное копирование
+
+Создал snapshot дисков всех ВМ.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-5-1.png)
+
+Ограничил время жизни snaphot в неделю. Сами snaphot настроил на ежедневное копирование.
+
+![alt text](https://github.com/artmur1/15-hw/blob/main/15-5-2.png)
 
 ### Дополнительно
 Не входит в минимальные требования. 
