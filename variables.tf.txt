@@ -1,0 +1,3 @@
+variable "maintf" {
+default = "Ваш ключ OAuth от Яндекс облака"
+}

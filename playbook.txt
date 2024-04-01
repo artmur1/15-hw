@@ -1,0 +1,81 @@
+- name: "Install packages"
+  hosts: servers
+  become: yes
+  tags:
+  - init
+  tasks:
+
+  - name: "Ensure that required packages are installed"
+    apt:
+      name:
+        - nginx
+        - zabbix-agent
+      state: present
+
+- hosts: zabbix
+  tasks:
+  - name: Install Zabbix server
+    apt:
+      name: 
+        - zabbix-server-mysql
+        - apache2
+      state: present
+  - name: Configure Zabbix database
+    mysql_user:
+      name: zabbix
+      password: zabbix_pswd
+      host: localhost
+      check_implicit_admin: yes
+      priv: "*.*:grant select,insert,update,delete,create,drop,index,alter,lock tables,create procedure,show view,trigger on *.* to 'zabbix'@'localhost' identified by 'zabbix_pswd'"
+    when: ansible_os_family == "Ubuntu"
+  - name: Create Zabbix user and group
+    user:
+      name: zabbix
+      group: zabbix
+    when: ansible_os_family == "Ubuntu"
+  vars:
+    zabbix_pswd: '12345678'
+
+- hosts: elk
+
+  vars:
+    package_name: "elasticsearch"
+
+  tasks:  
+    - name: Check if the package exists
+      stat:
+        path: "/tmp/elasticsearch-7.17.9-amd64.deb"
+      register: result
+
+    - name: Download the package if it doesn't exist
+      get_url:
+        url: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/elasticsearch-7.17.9-amd64.deb"
+        dest: "/tmp/"
+      when: not result.stat.exists
+
+    # Note: Replace `sudo apt install ./package.deb` with `dpkg -i ./package.deb` if you are using a Debian based system
+    - name: Install the package
+      apt:
+        deb: "/tmp/elasticsearch-7.17.9-amd64.deb"
+
+- hosts: kibana
+
+  vars:
+    package_name: "kibana"
+
+  tasks:  
+    - name: Check if the package exists
+      stat:
+        path: "/tmp/kibana-7.17.9-amd64.deb"
+      register: result
+
+    - name: Download the package if it doesn't exist
+      get_url:
+        url: "https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/kibana-7.17.9-amd64.deb"
+        dest: "/tmp/"
+      when: not result.stat.exists
+
+    # Note: Replace `sudo apt install ./package.deb` with `dpkg -i ./package.deb` if you are using a Debian based system
+    - name: Install the package
+      apt:
+        deb: "/tmp/kibana-7.17.9-amd64.deb"

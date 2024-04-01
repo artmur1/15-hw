@@ -1,0 +1,12 @@
+[servers]
+158.160.81.59 ansible_ssh_user=user
+158.160.155.199 ansible_ssh_user=user
+
+[zabbix]
+158.160.84.72 ansible_ssh_user=root
+
+[elk]
+158.160.71.177 ansible_ssh_user=root
+
+[kibana]
+84.201.176.240 ansible_ssh_user=root
