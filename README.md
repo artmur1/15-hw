@@ -5,9 +5,7 @@ main.tf - https://github.com/artmur1/15-hw/blob/main/main.tf.txt
 
 meta.yml - https://github.com/artmur1/15-hw/blob/main/meta.yml.txt
 
-variables.tf  - https://github.com/artmur1/15-hw/blob/main/variables.tf.txt
-
-В файле main.tf описано 5 виртуальных машин - vm1, vm2, zabbix, elk, kibana; а также Target Group, Backend Group, HTTP router, Application load balancer.
+В файле main.tf описано 6 виртуальных машин - bastion, vm1, vm2, zabbix, elk, kibana; target Group, backend Group, HTTP router, application load balancer, security groups, snapshot schedule.
 
 ## Файлы с кодом ansible:
 playbook.yaml - https://github.com/artmur1/15-hw/blob/main/playbook.txt
