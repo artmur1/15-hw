@@ -1,3 +1,4 @@
+
 terraform {
   required_providers {
     yandex = {
@@ -84,7 +85,7 @@ resource "yandex_compute_instance" "vm1-ubuntu2204" {
 
 resource "yandex_compute_disk" "vm2-ubuntu2204-disk" {
   name     = "vm2-ubuntu2204-disk"
-  zone     = local.zone
+  zone     = "ru-central1-d"
   size     = 8
   image_id = "fd833v6c5tb0udvk4jo6"
 }
