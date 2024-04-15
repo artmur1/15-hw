@@ -10,10 +10,50 @@ locals {
 }
 
 provider "yandex" {
-  token     = var.maintf
   cloud_id  = "b1gcrqu772dos233asd0"
   folder_id = "b1gmhlplt9a399ueaniq"
   zone      = "ru-central1-b"
+}
+
+resource "yandex_compute_disk" "bastion-host-disk" {
+  name     = "bastion-host-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd833v6c5tb0udvk4jo6"
+}
+
+resource "yandex_compute_instance" "bastion-host" {
+  name                      = "bastion-host"
+  allow_stopping_for_update = true
+  platform_id               = "standard-v3"
+  zone                      = local.zone
+
+  resources {
+    core_fraction = 20
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    disk_id = yandex_compute_disk.bastion-host-disk.id
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-1.id
+    security_group_ids = [yandex_vpc_security_group.my-sg.id]
+    nat       = true
+  }
+
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+}
+
+resource "yandex_compute_disk" "vm1-ubuntu2204-disk" {
+  name     = "vm1-ubuntu2204-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd833v6c5tb0udvk4jo6"
 }
 
 resource "yandex_compute_instance" "vm1-ubuntu2204" {
@@ -29,20 +69,24 @@ resource "yandex_compute_instance" "vm1-ubuntu2204" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd833v6c5tb0udvk4jo6"
-    }
+    disk_id = yandex_compute_disk.vm1-ubuntu2204-disk.id
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
-    nat       = true
+    nat       = false
   }
 
   metadata = {
-    #ssh-keys = "<имя_пользователя>:<содержимое_SSH-ключа>"
     user-data = "${file("./meta.yml")}"
   }
+}
+
+resource "yandex_compute_disk" "vm2-ubuntu2204-disk" {
+  name     = "vm2-ubuntu2204-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd833v6c5tb0udvk4jo6"
 }
 
 resource "yandex_compute_instance" "vm2-ubuntu2204" {
@@ -58,19 +102,24 @@ resource "yandex_compute_instance" "vm2-ubuntu2204" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd833v6c5tb0udvk4jo6"
-    }
+    disk_id = yandex_compute_disk.vm2-ubuntu2204-disk.id
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-2.id
-    nat       = true
+    nat       = false
   }
 
   metadata = {
     user-data = "${file("./meta.yml")}"
   }
+}
+
+resource "yandex_compute_disk" "zabbix-ubuntu2204-disk" {
+  name     = "zabbix-ubuntu2204-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd833v6c5tb0udvk4jo6"
 }
 
 resource "yandex_compute_instance" "zabbix-ubuntu2204" {
@@ -86,20 +135,25 @@ resource "yandex_compute_instance" "zabbix-ubuntu2204" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd833v6c5tb0udvk4jo6"
-    }
+    disk_id = yandex_compute_disk.zabbix-ubuntu2204-disk.id
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    security_group_ids = [yandex_vpc_security_group.my-sg.id]
     nat       = true
   }
 
   metadata = {
-    #ssh-keys = "<имя_пользователя>:<содержимое_SSH-ключа>"
     user-data = "${file("./meta.yml")}"
   }
+}
+
+resource "yandex_compute_disk" "elk-debian10-disk" {
+  name     = "elk-debian10-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd829qvrap41jvg5u68c"
 }
 
 resource "yandex_compute_instance" "elk-debian10" {
@@ -115,21 +169,25 @@ resource "yandex_compute_instance" "elk-debian10" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd829qvrap41jvg5u68c"
-      size     = 8
-    }
+    disk_id = yandex_compute_disk.elk-debian10-disk.id
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    security_group_ids = [yandex_vpc_security_group.my-sg.id]
     nat       = true
   }
 
   metadata = {
-    #ssh-keys = "<имя_пользователя>:<содержимое_SSH-ключа>"
     user-data = "${file("./meta.yml")}"
   }
+}
+
+resource "yandex_compute_disk" "kibana-debian10-disk" {
+  name     = "kibana-debian10-disk"
+  zone     = local.zone
+  size     = 8
+  image_id = "fd829qvrap41jvg5u68c"
 }
 
 resource "yandex_compute_instance" "kibana-debian10" {
@@ -145,25 +203,22 @@ resource "yandex_compute_instance" "kibana-debian10" {
   }
 
   boot_disk {
-    initialize_params {
-      image_id = "fd829qvrap41jvg5u68c"
-      size     = 8
-    }
+    disk_id = yandex_compute_disk.kibana-debian10-disk.id
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.subnet-1.id
+    security_group_ids = [yandex_vpc_security_group.my-sg.id]
     nat       = true
   }
 
   metadata = {
-    #ssh-keys = "<имя_пользователя>:<содержимое_SSH-ключа>"
     user-data = "${file("./meta.yml")}"
   }
 }
 
 resource "yandex_vpc_network" "network-1" {
-  name = "network1"
+  name = "network-1"
 }
 
 resource "yandex_vpc_subnet" "subnet-1" {
@@ -173,8 +228,67 @@ resource "yandex_vpc_subnet" "subnet-1" {
   v4_cidr_blocks = ["192.168.10.0/24"]
 }
 
+resource "yandex_vpc_security_group" "my-sg" {
+  name    = "my-sg"
+  network_id     = yandex_vpc_network.network-1.id
+  ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule1 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 22
+  }
+
+  ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule2 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 10050
+  }
+
+    ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule3 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 5601
+  }
+
+    ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule4 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 80
+  }
+
+    ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule5 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 443
+  }
+
+    ingress {
+#    protocol       = "TCP"
+    protocol       = "ANY"
+    description    = "rule6 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 30080
+  }
+
+  egress {
+    protocol       = "ANY"
+    description    = "rule2 description"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 resource "yandex_vpc_network" "network-2" {
-  name = "network2"
+  name = "network-2"
 }
 
 resource "yandex_vpc_subnet" "subnet-2" {
@@ -241,23 +355,18 @@ resource "yandex_alb_virtual_host" "my-virtual-host" {
       }
     }
   }
-  route_options {
-    security_profile_id = "fevdpmk5jsnskc5a31j4"
-  }
 }
 
 resource "yandex_alb_load_balancer" "test-balancer" {
   name               = "test-balancer"
   network_id         = yandex_vpc_network.network-1.id
-  security_group_ids = ["enpm6ooidj61kvcbpdbi"]
+  security_group_ids = [yandex_vpc_security_group.my-sg.id]
 
   allocation_policy {
     location {
       zone_id   = "ru-central1-b"
       subnet_id = yandex_vpc_subnet.subnet-1.id
     }
-
-   
   }
 
   listener {
@@ -275,6 +384,23 @@ resource "yandex_alb_load_balancer" "test-balancer" {
       }
     }
   }
+}
 
+resource "yandex_compute_snapshot_schedule" "default" {
+  name = "disksnapshot"
 
+  schedule_policy {
+    expression = "0 0 * * *"
+  }
+
+  snapshot_count = 7
+
+  snapshot_spec {
+    description = "snapshot-description"
+    labels = {
+      snapshot-label = "my-snapshot-label-value"
+    }
+  }
+
+  disk_ids = [yandex_compute_disk.bastion-host-disk.id, yandex_compute_disk.vm1-ubuntu2204-disk.id, yandex_compute_disk.vm2-ubuntu2204-disk.id, yandex_compute_disk.zabbix-ubuntu2204-disk.id, yandex_compute_disk.elk-debian10-disk.id, yandex_compute_disk.kibana-debian10-disk.id]
 }
